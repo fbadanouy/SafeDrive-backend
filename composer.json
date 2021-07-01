@@ -1,0 +1,40 @@
+{
+  "name": "oxusmedia/webapp-skeleton-admin",
+  "description": "Project skeleton for webapp admin panel",
+  "type": "project",
+  "authors": [
+    {
+      "name": "Fernando Badano",
+      "email": "fernando@oxusmedia.com",
+      "homepage": "https://www.oxusmedia.com",
+      "role": "Developer"
+    },
+    {
+      "name": "Gabriel Badano",
+      "email": "gbadano@oxusmedia.com",
+      "homepage": "https://www.oxusmedia.com",
+      "role": "Developer"
+    }
+  ],
+  "config": {
+    "vendor-dir": "protected/vendor"
+  },
+  "require": {
+    "oxusmedia/webapp": ">=2.0.0",
+    "ext-json": "*"
+  },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "gogs@gogs.oxusmedia.com:oxusmedia/webapp.git"
+    }
+  ],
+  "scripts": {
+    "post-update-cmd": [
+      "php protected/vendor/oxusmedia/webapp/scripts/installassets.php assets"
+    ],
+    "post-install-cmd": [
+      "php protected/vendor/oxusmedia/webapp/scripts/installassets.php assets"
+    ]
+  }
+}
