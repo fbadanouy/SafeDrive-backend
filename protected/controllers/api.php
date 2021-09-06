@@ -6,6 +6,55 @@ use oxusmedia\webApp\myDB;
 class api extends controller
 {
 
+    public function event() {
+
+        try {
+
+            $data = json_decode(file_get_contents("php://input"));
+
+        } catch (\Exception $e) {
+
+            $this->returnJson([
+                "resultado"     => "error",
+                "descripcion"   => "Formato de json incorrecto"
+            ]);
+
+            $this->log('api.log', 'ERROR: Formato de json incorrecto / ' . $e->getMessage());
+            
+            exit;
+        }
+
+        try {
+            
+            foreach ($data->event_data as $e) {
+
+                $e->matricula = $data->matricula;
+    
+                $row = (array) $e;
+
+                $this->db()->insert('registros', $row, true);
+    
+            }
+
+        } catch (\Exception $e) {
+
+            $this->returnJson([
+                "resultado"     => "error",
+                "descripcion"   => "Datos inválidos"
+            ]);
+
+            $this->log('api.log', 'ERROR: Datos Inválidos / ' . $e->getMessage());
+            
+            exit;
+        }
+        
+        $this->returnJson([
+            "resultado"     => "success",
+            "descripcion"   => "OK"
+        ]);
+
+    }
+
     public function sendCSV() {
 
         $matricula  = $_POST['matricula'];
