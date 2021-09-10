@@ -24,28 +24,60 @@ class api extends controller
             exit;
         }
 
-        try {
+        if ($data->token) {
+
+            $queryToken = $this->db()->queryRow("SELECT token FROM tokens WHERE token = :token", ['token' => $data->token]);
+
+            if ($queryToken) {
+
+                try {
             
-            foreach ($data->event_data as $e) {
+                    foreach ($data->event_data as $e) {
+        
+                        $e->matricula = $data->matricula;
+            
+                        $row = (array) $e;
+        
+                        $this->db()->insert('registros', $row, true);
+            
+                    }
+        
+                } catch (\Exception $e) {
+        
+                    $this->returnJson([
+                        "resultado"     => "error",
+                        "descripcion"   => "Datos inválidos"
+                    ]);
+        
+                    $this->log('api.log', 'ERROR: Datos Inválidos / ' . $e->getMessage());
+                    
+                    exit;
+                }
 
-                $e->matricula = $data->matricula;
-    
-                $row = (array) $e;
+            } else {
 
-                $this->db()->insert('registros', $row, true);
+                $this->returnJson([
+                    "resultado"     => "error",
+                    "descripcion"   => "Token Inválido"
+                ]);
     
+                $this->log('api.log', 'ERROR: Token Inválido');
+                
+                exit;
+
             }
 
-        } catch (\Exception $e) {
+        } else {
 
             $this->returnJson([
                 "resultado"     => "error",
-                "descripcion"   => "Datos inválidos"
+                "descripcion"   => "Falta Token de Seguridad"
             ]);
 
-            $this->log('api.log', 'ERROR: Datos Inválidos / ' . $e->getMessage());
+            $this->log('api.log', 'ERROR: Falta Token de Seguridad');
             
             exit;
+
         }
         
         $this->returnJson([
