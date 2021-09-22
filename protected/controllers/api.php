@@ -6,6 +6,14 @@ use oxusmedia\webApp\myDB;
 class api extends controller
 {
 
+    CONST 
+        EVENTO_RECORRIDO    = 1,
+        EVENTO_DISTRACCION  = 2,
+        EVENTO_SINTOMA      = 3,
+        EVENTO_DORMIDO      = 4,
+        EVENTO_ACELERACION  = 5,
+        EVENTO_FRENADO      = 6;
+
     public function event() {
 
         try {
